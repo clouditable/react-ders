@@ -1,47 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import './App.css';
+import {Provider} from "react-redux";
 
-import {TodoCreate} from "./TodoCreate";
-import {TodoList} from "./TodoList";
-const sleep = m => new Promise(r => setTimeout(r, m))
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
+import {Header} from "./Components/Common/Header";
+import {TodoScreen} from "./Screens/TodoScreen";
+import {MoviesScreen} from "./Screens/MoviesScreen";
+import {NotFound} from "./Components/Common/404";
 
-const getFakeTodos=  (async () => {
-    console.time("Slept for")
-    await sleep(3000)
-    return  [{title: "A"}, {title: "B"}, {title: "C"}, {title:"D"}]
-  })
-
+import {store} from "./store";
 
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [isLoading, setIsLoading]= useState(true);
-
-  // componentDidMount
-  /*useEffect(() => {
-    getFakeTodos().then(response => {
-      setTodos(response)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  },[])*/
-
-  // componentDidUpdate
-  useEffect(() => {
-    if(todos.length === 3) {
-      setIsLoading(false)
-      alert("todos count 3")
-    }
-  }, [todos.length])
-
-  const saveTodo = (title) => {
-    const newTodos =[...todos, {title}]
-    setTodos(newTodos)
-  }
   return (
-    <div className="App">
-      <TodoCreate saveTodo={saveTodo}/>
-      {isLoading ? <p>Loading...</p>:   <TodoList todoList={todos}/>}
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <Header/>
+        <Router>
+          <Switch>
+            <Route path="/todos" component={TodoScreen}/>
+            <Route path="/movies" component={MoviesScreen}/>
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Router>
+      </div>
+    </Provider>
   );
 }
 

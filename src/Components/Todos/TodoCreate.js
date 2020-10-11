@@ -1,6 +1,9 @@
 import React, {useState} from "react";
+import {useDispatch} from "react-redux";
+import {addTodoService} from "../../services/todos";
 
-export const TodoCreate = ({saveTodo}) => {
+export const TodoCreate = () => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
 
   const handleChangeTitle = (event) => {
@@ -8,6 +11,12 @@ export const TodoCreate = ({saveTodo}) => {
    setTitle(newTitle);
   }
 
+
+
+
+  const saveTodo = (title) => {
+    dispatch(addTodoService({title}));
+  }
 
   return (
     <div>
